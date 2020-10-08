@@ -32,8 +32,7 @@ unsigned char lock1[8] = {
     0b11111, 
     0b00000};
 
-char pos = 0;
-char line = 1;
+char pos = 0, line = 1, icon = 0;
 
 void main(void) {
     OSCCON=0x72;
@@ -51,8 +50,8 @@ void main(void) {
     __delay_ms(100);
     iniLCD();
     LCDcommand(DispOn);
-    GenChar(0,lock);
-    GenChar(1,lock1);
+    GenChar(0,lock); //Save character in CGRAM
+    GenChar(1,lock1); //Save character in CGRAM
     __delay_ms(100);
     CG_char(1,line,pos);  
     while(1){
@@ -61,35 +60,39 @@ void main(void) {
             if (line == 2)
             {
                 line--;
-                LCDcommand(ClearDisp);
-                CG_char(1,line,pos);  
             }
         } else if(DOWN == 1)
         {
             if (line == 1)
             {
                 line++;
-                LCDcommand(ClearDisp);
-                CG_char(1,line,pos);  
             }    
         } else if(RIGHT == 1)
         {
             if (pos < 15)
             {
                 pos++;
-                LCDcommand(ClearDisp);
-                CG_char(1,line,pos);
-                __delay_ms(250);
+
             }
         } else if(LEFT == 1)
         {
             if (pos > 0)
             {
                 pos--;
-                LCDcommand(ClearDisp);
-                CG_char(1,line,pos);
-                __delay_ms(200);
             }
         }
+        switch (icon) {
+            case 0 :
+                icon = 1;
+                break;
+            case 1 : 
+                icon = 0;
+                break;
+        default:
+        break;
+        }
+        LCDcommand(ClearDisp);
+        CG_char(icon,line,pos);
+        __delay_ms(200);
     }
 }
