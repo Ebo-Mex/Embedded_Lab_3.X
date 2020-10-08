@@ -13,8 +13,6 @@
 #include "lcd_cmds.h"
 #include "lcd_utils.h"
 
-#define _XTAL_FREQ 8000000
-
 unsigned char lock[8] = {
     0b01110, 
     0b10001, 
@@ -33,13 +31,12 @@ unsigned char lock1[8] = {
     0b11011, 
     0b11111, 
     0b00000};
+
 char pos = 0;
 char line = 1;
 
 void main(void) {
-    OSCCON=0x72; 
-    IPEN = _OFF;
-    GIE = _OFF;
+    OSCCON=0x72;
     
     //Turn OFF ADC
     ADCON1bits.PCFG0 = 1;
@@ -48,8 +45,6 @@ void main(void) {
     ADCON1bits.PCFG3 = 1;
     
     TRISA =  INPUT;
-    TRISB =  OUTPUT;
-    TRISC =  OUTPUT;
     TRISD =  OUTPUT;
     TRISE =  OUTPUT;
     

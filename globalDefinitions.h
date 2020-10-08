@@ -8,8 +8,6 @@
 #ifndef GLOBALDEFINITIONS_H
 #define	GLOBALDEFINITIONS_H
 
-#define LED_TRIS TRISAbits.RA0
-#define LED LATAbits.LA0 //Cada vez que escribe LED se refiere a este pin del puerto A
 #define _ON 1 //_ON ahora significa 1
 #define _OFF 0 //_OFF ahora significa 0
 #define INPUT 1;

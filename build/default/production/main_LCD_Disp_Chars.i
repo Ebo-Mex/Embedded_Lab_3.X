@@ -5846,8 +5846,6 @@ void GenChar(unsigned char loc,unsigned char *msg);
 # 14 "main_LCD_Disp_Chars.c" 2
 
 
-
-
 unsigned char lock[8] = {
     0b01110,
     0b10001,
@@ -5856,8 +5854,7 @@ unsigned char lock[8] = {
     0b11011,
     0b11011,
     0b11111,
-    0b00000
-};
+    0b00000};
 unsigned char lock1[8] = {
     0b01110,
     0b10000,
@@ -5867,13 +5864,12 @@ unsigned char lock1[8] = {
     0b11011,
     0b11111,
     0b00000};
+
 char pos = 0;
 char line = 1;
 
 void main(void) {
     OSCCON=0x72;
-    IPEN = 0;
-    GIE = 0;
 
 
     ADCON1bits.PCFG0 = 1;
@@ -5882,8 +5878,6 @@ void main(void) {
     ADCON1bits.PCFG3 = 1;
 
     TRISA = 1;;
-    TRISB = 0;;
-    TRISC = 0;;
     TRISD = 0;;
     TRISE = 0;;
 

@@ -20,4 +20,5 @@ void CG_char(char a, char line, char row);
 void MoveCursor(char x, char y);
 void MoveLCD(char dir, char inc);
 void GenChar(unsigned char loc,unsigned char *msg);
+
 #endif /* LCD_UTILS_H */
