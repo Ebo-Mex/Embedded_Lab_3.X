@@ -12,7 +12,7 @@ void iniLCD(){
     LCDcommand(Set8_2lin);  //N = 1 (2 lines), F=0 (5x8)
     LCDcommand(DispOn);   //D<2> ON; C<1> OFF; B<0> OFF;
     LCDcommand(ClearDisp);  //Disp Clear
-    LCDcommand(IncNoShif);  //I/D = 1, S=0
+    LCDcommand(IncShif);  //I/D = 1, S=0
     return;
 }
 

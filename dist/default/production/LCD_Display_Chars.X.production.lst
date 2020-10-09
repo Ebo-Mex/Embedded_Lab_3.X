@@ -1,7 +1,7 @@
 
 
 Microchip Technology PIC18 LITE Macro Assembler V2.00 build -1524193055 
-                                                                                               Thu Oct 08 20:00:58 2020
+                                                                                               Thu Oct 08 20:09:28 2020
 
 Microchip Technology Omniscient Code Generator v2.00 (Free mode) build 20180527130849
      1  0000                     
@@ -1016,7 +1016,7 @@ Microchip Technology Omniscient Code Generator v2.00 (Free mode) build 201805271
    922                           __CFG_EBTR3$OFF equ 0x0
    923  0000                     global __CFG_EBTRB$OFF
    924                           __CFG_EBTRB$OFF equ 0x0
-   925  0000                     	file	"C:\Users\ebo-9\AppData\Local\Temp\s17nk."
+   925  0000                     	file	"C:\Users\ebo-9\AppData\Local\Temp\s18e4."
    926                           	line	#
    927                           psect	cinit,class=CODE,delta=1,reloc=2
    928                           global __pcinit
@@ -1055,7 +1055,7 @@ Microchip Technology Omniscient Code Generator v2.00 (Free mode) build 201805271
    961                           	global	_lock
    962                           _lock:
    963  00000A                            ds      8
-   964  00000A                     	file	"C:\Users\ebo-9\AppData\Local\Temp\s17nk."
+   964  00000A                     	file	"C:\Users\ebo-9\AppData\Local\Temp\s18e4."
    965                           	line	#
    966                           psect	cinit
    967                           ; Initialize objects allocated to COMRAM (17 bytes)
@@ -1854,9 +1854,9 @@ Microchip Technology Omniscient Code Generator v2.00 (Free mode) build 201805271
   1759  007D88  EC71  F03E         	line	15
   1760                           	
   1761                           l811:
-  1762  007D8C                     ;lcd_utils.c: 15:     LCDcommand(0b00000110);
-  1763                           	movlw	(06h)&0ffh
-  1764  007D8C  0E06               	
+  1762  007D8C                     ;lcd_utils.c: 15:     LCDcommand(0b00000111);
+  1763                           	movlw	(07h)&0ffh
+  1764  007D8C  0E07               	
   1765                           	call	_LCDcommand
   1766  007D8E  EC71  F03E         	goto	l60
   1767  007D92  EFCB  F03E         	line	16
@@ -2518,7 +2518,7 @@ CODE                 0      0       0       0        0.0%
 
 
 Microchip Technology PIC18 Macro Assembler V2.00 build -1524193055 
-Symbol Table                                                                                   Thu Oct 08 20:00:58 2020
+Symbol Table                                                                                   Thu Oct 08 20:09:28 2020
 
                      l40 7F5A                       l41 7F7E                       l42 7F9A  
                      l43 7F82                       l60 7D96                       l44 7FC4  

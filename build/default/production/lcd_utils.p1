@@ -580,8 +580,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;lcd_utils.c: 14:     LCDcommand(0b00000001);
 [e ( _LCDcommand (1 -> -> 1 `i `uc ]
 "15
-[; ;lcd_utils.c: 15:     LCDcommand(0b00000110);
-[e ( _LCDcommand (1 -> -> 6 `i `uc ]
+[; ;lcd_utils.c: 15:     LCDcommand(0b00000111);
+[e ( _LCDcommand (1 -> -> 7 `i `uc ]
 "16
 [; ;lcd_utils.c: 16:     return;
 [e $UE 367  ]

@@ -5649,7 +5649,7 @@ void iniLCD(){
     LCDcommand(0b00111000);
     LCDcommand(0b00001100);
     LCDcommand(0b00000001);
-    LCDcommand(0b00000110);
+    LCDcommand(0b00000111);
     return;
 }
 
