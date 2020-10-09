@@ -5846,7 +5846,7 @@ void GenChar(unsigned char loc,unsigned char *msg);
 # 14 "main_LCD_Disp_Chars.c" 2
 
 
-unsigned char lock[8] = {
+unsigned char lock_F[8] = {
     0b01110,
     0b10001,
     0b10001,
@@ -5855,7 +5855,34 @@ unsigned char lock[8] = {
     0b11011,
     0b11111,
     0b00000};
-unsigned char lock1[8] = {
+unsigned char lock_R[8] = {
+    0b01110,
+    0b01010,
+    0b01010,
+    0b01110,
+    0b01100,
+    0b01100,
+    0b01110,
+    0b00000};
+unsigned char lock_B[8] = {
+    0b01110,
+    0b10001,
+    0b10001,
+    0b11111,
+    0b11111,
+    0b11111,
+    0b11111,
+    0b00000};
+unsigned char lock_L[8] = {
+    0b01110,
+    0b01010,
+    0b01010,
+    0b01110,
+    0b00110,
+    0b00110,
+    0b01110,
+    0b00000};
+unsigned char lock_end[8] = {
     0b01110,
     0b10000,
     0b10000,
@@ -5881,10 +5908,13 @@ void main(void) {
     TRISE = 0;;
 
     iniLCD();
-    GenChar(0,lock);
-    GenChar(1,lock1);
+    GenChar(0,lock_F);
+    GenChar(1,lock_R);
+    GenChar(2,lock_B);
+    GenChar(3,lock_L);
+    GenChar(4,lock_end);
     _delay((unsigned long)((100)*(8000000/4000.0)));
-    CG_char(1,line,pos);
+    CG_char(0,line,pos);
     _delay((unsigned long)((100)*(8000000/4000.0)));
 
     while(1){
@@ -5905,6 +5935,12 @@ void main(void) {
                 icon = 1;
                 break;
             case 1 :
+                icon = 2;
+                break;
+            case 2 :
+                icon = 3;
+                break;
+            case 3 :
                 icon = 0;
                 break;
             default:
