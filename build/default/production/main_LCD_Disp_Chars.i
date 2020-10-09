@@ -5839,7 +5839,7 @@ extern __attribute__((nonreentrant)) void _delay3(unsigned char);
 void iniLCD(void);
 void LCDcommand(char a);
 void LCDchar(char a);
-void CG_char(char a, char line, char row);
+void CG_char(char a, int line, int row);
 void MoveCursor(char x, char y);
 void MoveLCD(char dir, char inc);
 void GenChar(unsigned char loc,unsigned char *msg);
@@ -5865,8 +5865,7 @@ unsigned char lock1[8] = {
     0b11111,
     0b00000};
 
-char pos = 0;
-char line = 1;
+char pos = 0, icon = 0, line = 1;
 
 void main(void) {
     OSCCON=0x72;
@@ -5881,48 +5880,39 @@ void main(void) {
     TRISD = 0;;
     TRISE = 0;;
 
-    _delay((unsigned long)((100)*(8000000/4000.0)));
     iniLCD();
-    LCDcommand(0b00001100);
     GenChar(0,lock);
     GenChar(1,lock1);
     _delay((unsigned long)((100)*(8000000/4000.0)));
     CG_char(1,line,pos);
+    _delay((unsigned long)((100)*(8000000/4000.0)));
+
     while(1){
-        if(PORTAbits.RA0 == 1)
-        {
-            if (line == 2)
-            {
-                line--;
-                LCDcommand(0b00000001);
-                CG_char(1,line,pos);
-            }
-        } else if(PORTAbits.RA1 == 1)
-        {
-            if (line == 1)
-            {
-                line++;
-                LCDcommand(0b00000001);
-                CG_char(1,line,pos);
-            }
-        } else if(PORTAbits.RA2 == 1)
-        {
-            if (pos < 15)
-            {
-                pos++;
-                LCDcommand(0b00000001);
-                CG_char(1,line,pos);
-                _delay((unsigned long)((250)*(8000000/4000.0)));
-            }
-        } else if(PORTAbits.RA3 == 1)
-        {
-            if (pos > 0)
-            {
-                pos--;
-                LCDcommand(0b00000001);
-                CG_char(1,line,pos);
-                _delay((unsigned long)((200)*(8000000/4000.0)));
-            }
+        if(PORTAbits.RA0 == 1 & line == 2){
+            line--;
         }
+        if(PORTAbits.RA1 == 1 & line == 1){
+            line++;
+        }
+        if(PORTAbits.RA2 == 1 & pos < 15){
+            pos++;
+        }
+        if(PORTAbits.RA3 == 1 & pos > 0){
+            pos--;
+        }
+        switch (icon){
+            case 0 :
+                icon = 1;
+                break;
+            case 1 :
+                icon = 0;
+                break;
+            default:
+                break;
+        }
+
+        LCDcommand(0b00000001);
+        CG_char(icon,line,pos);
+        _delay((unsigned long)((200)*(8000000/4000.0)));
     }
 }

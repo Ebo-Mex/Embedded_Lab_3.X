@@ -10,7 +10,7 @@ void iniLCD(){
     __delay_ms(1);          //5. Esperar mas de 100us
     LCDcommand(Set8);       //6. Comando set 8 bits
     LCDcommand(Set8_2lin);  //N = 1 (2 lines), F=0 (5x8)
-    LCDcommand(DispOnCB);   //D<2> ON; C<1> ON; B<0> ON;
+    LCDcommand(DispOn);   //D<2> ON; C<1> OFF; B<0> OFF;
     LCDcommand(ClearDisp);  //Disp Clear
     LCDcommand(IncNoShif);  //I/D = 1, S=0
     return;
@@ -34,7 +34,7 @@ void LCDchar(char a){
     PORTEbits.RE1 = 0; //RE1 --> E=0
 }
 
-void CG_char(char a, char line, char row){
+void CG_char(char a, int line, int row){
     int cmd;
     if (line == 1)
     {
@@ -46,11 +46,7 @@ void CG_char(char a, char line, char row){
         cmd = line + row;    
     }   
     LCDcommand(cmd);    /*Display characters from c0(2nd row) location */
-    PORTD = a; //Valor ASCII
-    PORTEbits.RE0 = 1;
-    PORTEbits.RE1 = 1; //RE1 --> E=1
-    __delay_us(40);
-    PORTEbits.RE1 = 0; //RE1 --> E=0
+    LCDchar(a);
 }
 
 void MoveCursor(char x, char y){
@@ -87,14 +83,11 @@ void MoveLCD(char dir, char inc){
     }
 }
 
-
-
-void GenChar(unsigned char loc,unsigned char *msg)
-{
+void GenChar(unsigned char loc,unsigned char *msg){
     unsigned char i;
     if(loc<8)
     {
-        LCDcommand(0x40+(loc*8));  /* Command 0x40 and onwards forces the device to point CGRAM address */
+        LCDcommand(SetCGRAM + (loc*8));  /* Command 0x40 and onwards forces the device to point CGRAM address */
         for(i=0;i<8;i++)  /* Write 8 byte for generation of 1 character */
             LCDchar(msg[i]);
     }   

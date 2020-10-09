@@ -31,22 +31,19 @@ Version 4.0 HI-TECH Software Intermediate Code
 "4223
 [; ;D:/Microchip/xc8/v2.00/pic/include\pic18f4550.h: 4223: extern volatile unsigned char TRISE __attribute__((address(0xF96)));
 [v _TRISE `Vuc ~T0 @X0 0 e@3990 ]
+"16 ./lcd_utils.h
+[; ;./lcd_utils.h: 16: void iniLCD(void);
+[v _iniLCD `(v ~T0 @X0 0 ef ]
+"22
+[; ;./lcd_utils.h: 22: void GenChar(unsigned char loc,unsigned char *msg);
+[v _GenChar `(v ~T0 @X0 0 ef2`uc`*uc ]
 [v F3468 `(v ~T0 @X0 1 tf1`ul ]
 "183 D:/Microchip/xc8/v2.00/pic/include\pic18.h
 [v __delay `JF3468 ~T0 @X0 0 e ]
 [p i __delay ]
-"16 ./lcd_utils.h
-[; ;./lcd_utils.h: 16: void iniLCD(void);
-[v _iniLCD `(v ~T0 @X0 0 ef ]
-"17
-[; ;./lcd_utils.h: 17: void LCDcommand(char a);
-[v _LCDcommand `(v ~T0 @X0 0 ef1`uc ]
-"22
-[; ;./lcd_utils.h: 22: void GenChar(unsigned char loc,unsigned char *msg);
-[v _GenChar `(v ~T0 @X0 0 ef2`uc`*uc ]
-"19
-[; ;./lcd_utils.h: 19: void CG_char(char a, char line, char row);
-[v _CG_char `(v ~T0 @X0 0 ef3`uc`uc`uc ]
+"19 ./lcd_utils.h
+[; ;./lcd_utils.h: 19: void CG_char(char a, int line, int row);
+[v _CG_char `(v ~T0 @X0 0 ef3`uc`i`i ]
 "2320 D:/Microchip/xc8/v2.00/pic/include\pic18f4550.h
 [; ;D:/Microchip/xc8/v2.00/pic/include\pic18f4550.h: 2320:     struct {
 [s S98 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
@@ -74,6 +71,9 @@ Version 4.0 HI-TECH Software Intermediate Code
 "2353
 [; ;D:/Microchip/xc8/v2.00/pic/include\pic18f4550.h: 2353: extern volatile PORTAbits_t PORTAbits __attribute__((address(0xF80)));
 [v _PORTAbits `VS97 ~T0 @X0 0 e@3968 ]
+"17 ./lcd_utils.h
+[; ;./lcd_utils.h: 17: void LCDcommand(char a);
+[v _LCDcommand `(v ~T0 @X0 0 ef1`uc ]
 "54 D:/Microchip/xc8/v2.00/pic/include\pic18f4550.h
 [; ;D:/Microchip/xc8/v2.00/pic/include\pic18f4550.h: 54: __asm("SPPDATA equ 0F62h");
 [; <" SPPDATA equ 0F62h ;# ">
@@ -691,202 +691,169 @@ Version 4.0 HI-TECH Software Intermediate Code
 ..
 ]
 "35
-[; ;main_LCD_Disp_Chars.c: 35: char pos = 0;
+[; ;main_LCD_Disp_Chars.c: 35: char pos = 0, icon = 0, line = 1;
 [v _pos `uc ~T0 @X0 1 e ]
 [i _pos
 -> -> 0 `i `uc
 ]
-"36
-[; ;main_LCD_Disp_Chars.c: 36: char line = 1;
+[v _icon `uc ~T0 @X0 1 e ]
+[i _icon
+-> -> 0 `i `uc
+]
 [v _line `uc ~T0 @X0 1 e ]
 [i _line
 -> -> 1 `i `uc
 ]
 [v $root$_main `(v ~T0 @X0 0 e ]
-"38
-[; ;main_LCD_Disp_Chars.c: 38: void main(void) {
+"37
+[; ;main_LCD_Disp_Chars.c: 37: void main(void) {
 [v _main `(v ~T0 @X0 1 ef ]
 {
 [e :U _main ]
 [f ]
-"39
-[; ;main_LCD_Disp_Chars.c: 39:     OSCCON=0x72;
+"38
+[; ;main_LCD_Disp_Chars.c: 38:     OSCCON=0x72;
 [e = _OSCCON -> -> 114 `i `uc ]
-"42
-[; ;main_LCD_Disp_Chars.c: 42:     ADCON1bits.PCFG0 = 1;
+"41
+[; ;main_LCD_Disp_Chars.c: 41:     ADCON1bits.PCFG0 = 1;
 [e = . . _ADCON1bits 1 0 -> -> 1 `i `uc ]
-"43
-[; ;main_LCD_Disp_Chars.c: 43:     ADCON1bits.PCFG1 = 1;
+"42
+[; ;main_LCD_Disp_Chars.c: 42:     ADCON1bits.PCFG1 = 1;
 [e = . . _ADCON1bits 1 1 -> -> 1 `i `uc ]
-"44
-[; ;main_LCD_Disp_Chars.c: 44:     ADCON1bits.PCFG2 = 1;
+"43
+[; ;main_LCD_Disp_Chars.c: 43:     ADCON1bits.PCFG2 = 1;
 [e = . . _ADCON1bits 1 2 -> -> 1 `i `uc ]
-"45
-[; ;main_LCD_Disp_Chars.c: 45:     ADCON1bits.PCFG3 = 1;
+"44
+[; ;main_LCD_Disp_Chars.c: 44:     ADCON1bits.PCFG3 = 1;
 [e = . . _ADCON1bits 1 3 -> -> 1 `i `uc ]
-"47
-[; ;main_LCD_Disp_Chars.c: 47:     TRISA = 1;;
+"46
+[; ;main_LCD_Disp_Chars.c: 46:     TRISA = 1;;
 [e = _TRISA -> -> 1 `i `uc ]
-"48
-[; ;main_LCD_Disp_Chars.c: 48:     TRISD = 0;;
+"47
+[; ;main_LCD_Disp_Chars.c: 47:     TRISD = 0;;
 [e = _TRISD -> -> 0 `i `uc ]
-"49
-[; ;main_LCD_Disp_Chars.c: 49:     TRISE = 0;;
+"48
+[; ;main_LCD_Disp_Chars.c: 48:     TRISE = 0;;
 [e = _TRISE -> -> 0 `i `uc ]
-"51
-[; ;main_LCD_Disp_Chars.c: 51:     _delay((unsigned long)((100)*(8000000/4000.0)));
-[e ( __delay (1 -> * -> -> 100 `i `d / -> -> 8000000 `l `d .4000.0 `ul ]
-"52
-[; ;main_LCD_Disp_Chars.c: 52:     iniLCD();
+"50
+[; ;main_LCD_Disp_Chars.c: 50:     iniLCD();
 [e ( _iniLCD ..  ]
-"53
-[; ;main_LCD_Disp_Chars.c: 53:     LCDcommand(0b00001100);
-[e ( _LCDcommand (1 -> -> 12 `i `uc ]
-"54
-[; ;main_LCD_Disp_Chars.c: 54:     GenChar(0,lock);
+"51
+[; ;main_LCD_Disp_Chars.c: 51:     GenChar(0,lock);
 [e ( _GenChar (2 , -> -> 0 `i `uc &U _lock ]
-"55
-[; ;main_LCD_Disp_Chars.c: 55:     GenChar(1,lock1);
+"52
+[; ;main_LCD_Disp_Chars.c: 52:     GenChar(1,lock1);
 [e ( _GenChar (2 , -> -> 1 `i `uc &U _lock1 ]
-"56
-[; ;main_LCD_Disp_Chars.c: 56:     _delay((unsigned long)((100)*(8000000/4000.0)));
+"53
+[; ;main_LCD_Disp_Chars.c: 53:     _delay((unsigned long)((100)*(8000000/4000.0)));
+[e ( __delay (1 -> * -> -> 100 `i `d / -> -> 8000000 `l `d .4000.0 `ul ]
+"54
+[; ;main_LCD_Disp_Chars.c: 54:     CG_char(1,line,pos);
+[e ( _CG_char (3 , , -> -> 1 `i `uc -> _line `i -> _pos `i ]
+"55
+[; ;main_LCD_Disp_Chars.c: 55:     _delay((unsigned long)((100)*(8000000/4000.0)));
 [e ( __delay (1 -> * -> -> 100 `i `d / -> -> 8000000 `l `d .4000.0 `ul ]
 "57
-[; ;main_LCD_Disp_Chars.c: 57:     CG_char(1,line,pos);
-[e ( _CG_char (3 , , -> -> 1 `i `uc _line _pos ]
-"58
-[; ;main_LCD_Disp_Chars.c: 58:     while(1){
+[; ;main_LCD_Disp_Chars.c: 57:     while(1){
 [e :U 371 ]
 {
+"58
+[; ;main_LCD_Disp_Chars.c: 58:         if(PORTAbits.RA0 == 1 & line == 2){
+[e $ ! & == -> . . _PORTAbits 0 0 `i -> 1 `i == -> _line `i -> 2 `i 373  ]
+{
 "59
-[; ;main_LCD_Disp_Chars.c: 59:         if(PORTAbits.RA0 == 1)
-[e $ ! == -> . . _PORTAbits 0 0 `i -> 1 `i 373  ]
-"60
-[; ;main_LCD_Disp_Chars.c: 60:         {
-{
-"61
-[; ;main_LCD_Disp_Chars.c: 61:             if (line == 2)
-[e $ ! == -> _line `i -> 2 `i 374  ]
-"62
-[; ;main_LCD_Disp_Chars.c: 62:             {
-{
-"63
-[; ;main_LCD_Disp_Chars.c: 63:                 line--;
+[; ;main_LCD_Disp_Chars.c: 59:             line--;
 [e -- _line -> -> 1 `i `uc ]
-"64
-[; ;main_LCD_Disp_Chars.c: 64:                 LCDcommand(0b00000001);
-[e ( _LCDcommand (1 -> -> 1 `i `uc ]
-"65
-[; ;main_LCD_Disp_Chars.c: 65:                 CG_char(1,line,pos);
-[e ( _CG_char (3 , , -> -> 1 `i `uc _line _pos ]
-"66
-[; ;main_LCD_Disp_Chars.c: 66:             }
+"60
+[; ;main_LCD_Disp_Chars.c: 60:         }
+}
+[e :U 373 ]
+"61
+[; ;main_LCD_Disp_Chars.c: 61:         if(PORTAbits.RA1 == 1 & line == 1){
+[e $ ! & == -> . . _PORTAbits 0 1 `i -> 1 `i == -> _line `i -> 1 `i 374  ]
+{
+"62
+[; ;main_LCD_Disp_Chars.c: 62:             line++;
+[e ++ _line -> -> 1 `i `uc ]
+"63
+[; ;main_LCD_Disp_Chars.c: 63:         }
 }
 [e :U 374 ]
-"67
-[; ;main_LCD_Disp_Chars.c: 67:         } else if(PORTAbits.RA1 == 1)
-}
-[e $U 375  ]
-[e :U 373 ]
-[e $ ! == -> . . _PORTAbits 0 1 `i -> 1 `i 376  ]
-"68
-[; ;main_LCD_Disp_Chars.c: 68:         {
+"64
+[; ;main_LCD_Disp_Chars.c: 64:         if(PORTAbits.RA2 == 1 & pos < 15){
+[e $ ! & == -> . . _PORTAbits 0 2 `i -> 1 `i < -> _pos `i -> 15 `i 375  ]
 {
+"65
+[; ;main_LCD_Disp_Chars.c: 65:             pos++;
+[e ++ _pos -> -> 1 `i `uc ]
+"66
+[; ;main_LCD_Disp_Chars.c: 66:         }
+}
+[e :U 375 ]
+"67
+[; ;main_LCD_Disp_Chars.c: 67:         if(PORTAbits.RA3 == 1 & pos > 0){
+[e $ ! & == -> . . _PORTAbits 0 3 `i -> 1 `i > -> _pos `i -> 0 `i 376  ]
+{
+"68
+[; ;main_LCD_Disp_Chars.c: 68:             pos--;
+[e -- _pos -> -> 1 `i `uc ]
 "69
-[; ;main_LCD_Disp_Chars.c: 69:             if (line == 1)
-[e $ ! == -> _line `i -> 1 `i 377  ]
+[; ;main_LCD_Disp_Chars.c: 69:         }
+}
+[e :U 376 ]
 "70
-[; ;main_LCD_Disp_Chars.c: 70:             {
+[; ;main_LCD_Disp_Chars.c: 70:         switch (icon){
+[e $U 378  ]
 {
 "71
-[; ;main_LCD_Disp_Chars.c: 71:                 line++;
-[e ++ _line -> -> 1 `i `uc ]
-"72
-[; ;main_LCD_Disp_Chars.c: 72:                 LCDcommand(0b00000001);
-[e ( _LCDcommand (1 -> -> 1 `i `uc ]
-"73
-[; ;main_LCD_Disp_Chars.c: 73:                 CG_char(1,line,pos);
-[e ( _CG_char (3 , , -> -> 1 `i `uc _line _pos ]
-"74
-[; ;main_LCD_Disp_Chars.c: 74:             }
-}
-[e :U 377 ]
-"75
-[; ;main_LCD_Disp_Chars.c: 75:         } else if(PORTAbits.RA2 == 1)
-}
-[e $U 378  ]
-[e :U 376 ]
-[e $ ! == -> . . _PORTAbits 0 2 `i -> 1 `i 379  ]
-"76
-[; ;main_LCD_Disp_Chars.c: 76:         {
-{
-"77
-[; ;main_LCD_Disp_Chars.c: 77:             if (pos < 15)
-[e $ ! < -> _pos `i -> 15 `i 380  ]
-"78
-[; ;main_LCD_Disp_Chars.c: 78:             {
-{
-"79
-[; ;main_LCD_Disp_Chars.c: 79:                 pos++;
-[e ++ _pos -> -> 1 `i `uc ]
-"80
-[; ;main_LCD_Disp_Chars.c: 80:                 LCDcommand(0b00000001);
-[e ( _LCDcommand (1 -> -> 1 `i `uc ]
-"81
-[; ;main_LCD_Disp_Chars.c: 81:                 CG_char(1,line,pos);
-[e ( _CG_char (3 , , -> -> 1 `i `uc _line _pos ]
-"82
-[; ;main_LCD_Disp_Chars.c: 82:                 _delay((unsigned long)((250)*(8000000/4000.0)));
-[e ( __delay (1 -> * -> -> 250 `i `d / -> -> 8000000 `l `d .4000.0 `ul ]
-"83
-[; ;main_LCD_Disp_Chars.c: 83:             }
-}
-[e :U 380 ]
-"84
-[; ;main_LCD_Disp_Chars.c: 84:         } else if(PORTAbits.RA3 == 1)
-}
-[e $U 381  ]
+[; ;main_LCD_Disp_Chars.c: 71:             case 0 :
 [e :U 379 ]
-[e $ ! == -> . . _PORTAbits 0 3 `i -> 1 `i 382  ]
-"85
-[; ;main_LCD_Disp_Chars.c: 85:         {
-{
-"86
-[; ;main_LCD_Disp_Chars.c: 86:             if (pos > 0)
-[e $ ! > -> _pos `i -> 0 `i 383  ]
-"87
-[; ;main_LCD_Disp_Chars.c: 87:             {
-{
-"88
-[; ;main_LCD_Disp_Chars.c: 88:                 pos--;
-[e -- _pos -> -> 1 `i `uc ]
-"89
-[; ;main_LCD_Disp_Chars.c: 89:                 LCDcommand(0b00000001);
-[e ( _LCDcommand (1 -> -> 1 `i `uc ]
-"90
-[; ;main_LCD_Disp_Chars.c: 90:                 CG_char(1,line,pos);
-[e ( _CG_char (3 , , -> -> 1 `i `uc _line _pos ]
-"91
-[; ;main_LCD_Disp_Chars.c: 91:                 _delay((unsigned long)((200)*(8000000/4000.0)));
-[e ( __delay (1 -> * -> -> 200 `i `d / -> -> 8000000 `l `d .4000.0 `ul ]
-"92
-[; ;main_LCD_Disp_Chars.c: 92:             }
-}
-[e :U 383 ]
-"93
-[; ;main_LCD_Disp_Chars.c: 93:         }
-}
-[e :U 382 ]
+"72
+[; ;main_LCD_Disp_Chars.c: 72:                 icon = 1;
+[e = _icon -> -> 1 `i `uc ]
+"73
+[; ;main_LCD_Disp_Chars.c: 73:                 break;
+[e $U 377  ]
+"74
+[; ;main_LCD_Disp_Chars.c: 74:             case 1 :
+[e :U 380 ]
+"75
+[; ;main_LCD_Disp_Chars.c: 75:                 icon = 0;
+[e = _icon -> -> 0 `i `uc ]
+"76
+[; ;main_LCD_Disp_Chars.c: 76:                 break;
+[e $U 377  ]
+"77
+[; ;main_LCD_Disp_Chars.c: 77:             default:
 [e :U 381 ]
+"78
+[; ;main_LCD_Disp_Chars.c: 78:                 break;
+[e $U 377  ]
+"79
+[; ;main_LCD_Disp_Chars.c: 79:         }
+}
+[e $U 377  ]
 [e :U 378 ]
-[e :U 375 ]
-"94
-[; ;main_LCD_Disp_Chars.c: 94:     }
+[e [\ -> _icon `i , $ -> 0 `i 379
+ , $ -> 1 `i 380
+ 381 ]
+[e :U 377 ]
+"81
+[; ;main_LCD_Disp_Chars.c: 81:         LCDcommand(0b00000001);
+[e ( _LCDcommand (1 -> -> 1 `i `uc ]
+"82
+[; ;main_LCD_Disp_Chars.c: 82:         CG_char(icon,line,pos);
+[e ( _CG_char (3 , , _icon -> _line `i -> _pos `i ]
+"83
+[; ;main_LCD_Disp_Chars.c: 83:         _delay((unsigned long)((200)*(8000000/4000.0)));
+[e ( __delay (1 -> * -> -> 200 `i `d / -> -> 8000000 `l `d .4000.0 `ul ]
+"84
+[; ;main_LCD_Disp_Chars.c: 84:     }
 }
 [e :U 370 ]
 [e $U 371  ]
 [e :U 372 ]
-"95
-[; ;main_LCD_Disp_Chars.c: 95: }
+"85
+[; ;main_LCD_Disp_Chars.c: 85: }
 [e :UE 369 ]
 }

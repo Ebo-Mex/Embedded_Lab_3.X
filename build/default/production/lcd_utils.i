@@ -5630,7 +5630,7 @@ extern __attribute__((nonreentrant)) void _delay3(unsigned char);
 void iniLCD(void);
 void LCDcommand(char a);
 void LCDchar(char a);
-void CG_char(char a, char line, char row);
+void CG_char(char a, int line, int row);
 void MoveCursor(char x, char y);
 void MoveLCD(char dir, char inc);
 void GenChar(unsigned char loc,unsigned char *msg);
@@ -5647,7 +5647,7 @@ void iniLCD(){
     _delay((unsigned long)((1)*(8000000/4000.0)));
     LCDcommand(0b00110000);
     LCDcommand(0b00111000);
-    LCDcommand(0b00001111);
+    LCDcommand(0b00001100);
     LCDcommand(0b00000001);
     LCDcommand(0b00000110);
     return;
@@ -5671,7 +5671,7 @@ void LCDchar(char a){
     PORTEbits.RE1 = 0;
 }
 
-void CG_char(char a, char line, char row){
+void CG_char(char a, int line, int row){
     int cmd;
     if (line == 1)
     {
@@ -5683,11 +5683,7 @@ void CG_char(char a, char line, char row){
         cmd = line + row;
     }
     LCDcommand(cmd);
-    PORTD = a;
-    PORTEbits.RE0 = 1;
-    PORTEbits.RE1 = 1;
-    _delay((unsigned long)((40)*(8000000/4000000.0)));
-    PORTEbits.RE1 = 0;
+    LCDchar(a);
 }
 
 void MoveCursor(char x, char y){
@@ -5724,14 +5720,11 @@ void MoveLCD(char dir, char inc){
     }
 }
 
-
-
-void GenChar(unsigned char loc,unsigned char *msg)
-{
+void GenChar(unsigned char loc,unsigned char *msg){
     unsigned char i;
     if(loc<8)
     {
-        LCDcommand(0x40+(loc*8));
+        LCDcommand(0b01000000 + (loc*8));
         for(i=0;i<8;i++)
             LCDchar(msg[i]);
     }

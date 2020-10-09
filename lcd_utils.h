@@ -16,7 +16,7 @@
 void iniLCD(void);
 void LCDcommand(char a);
 void LCDchar(char a);
-void CG_char(char a, char line, char row);
+void CG_char(char a, int line, int row);
 void MoveCursor(char x, char y);
 void MoveLCD(char dir, char inc);
 void GenChar(unsigned char loc,unsigned char *msg);
