@@ -5839,12 +5839,21 @@ extern __attribute__((nonreentrant)) void _delay3(unsigned char);
 void iniLCD(void);
 void LCDcommand(char a);
 void LCDchar(char a);
-void CG_char(char a, int line, int row);
+void CG_char(char a, char line, char row);
 void MoveCursor(char x, char y);
 void MoveLCD(char dir, char inc);
 void GenChar(unsigned char loc,unsigned char *msg);
+int rand_key(char k_pos);
+void LCDString(char *msg);
 # 14 "main_LCD_Disp_Chars.c" 2
 
+
+void lock_sprite_switch(void);
+void game_over_seq(void);
+void level_up(void);
+void move_lock(void);
+void out_of_screen(void);
+void move_stage(void);
 
 unsigned char lock_F[8] = {
     0b01110,
@@ -5882,6 +5891,15 @@ unsigned char lock_L[8] = {
     0b00110,
     0b01110,
     0b00000};
+unsigned char key[8] = {
+    0b00110,
+    0b00100,
+    0b00110,
+    0b00100,
+    0b01110,
+    0b01010,
+    0b01110,
+    0b00000};
 unsigned char lock_end[8] = {
     0b01110,
     0b10000,
@@ -5891,8 +5909,29 @@ unsigned char lock_end[8] = {
     0b11011,
     0b11111,
     0b00000};
+unsigned char lock_broken[8] = {
+  0b01110,
+  0b00001,
+  0b10001,
+  0b11101,
+  0b11011,
+  0b11010,
+  0b01111,
+  0b00000};
+unsigned char smiley[8] = {
+    0b00000,
+    0b00000,
+    0b01010,
+    0b00000,
+    0b10001,
+    0b01110,
+    0b00000,
+    0b00000};
 
-char pos = 0, icon = 0, line = 1;
+char pos = 1, icon = 0, line = 1, shift = 0;
+char key_ = 15, key_pointer = 0, level = 4;
+char key_pos[8] = {-1, -1, -1, -1, -1, -1, -1, -1};
+char key_line[8] = {-1, -1, -1, -1, -1, -1, -1, -1};
 
 void main(void) {
     OSCCON=0x72;
@@ -5913,42 +5952,140 @@ void main(void) {
     GenChar(2,lock_B);
     GenChar(3,lock_L);
     GenChar(4,lock_end);
-    _delay((unsigned long)((100)*(8000000/4000.0)));
-    CG_char(0,line,pos);
+    GenChar(5,key);
+    GenChar(6,lock_broken);
+    GenChar(7,smiley);
     _delay((unsigned long)((100)*(8000000/4000.0)));
 
     while(1){
-        if(PORTAbits.RA0 == 1 & line == 2){
-            line--;
-        }
-        if(PORTAbits.RA1 == 1 & line == 1){
-            line++;
-        }
-        if(PORTAbits.RA2 == 1 & pos < 15){
-            pos++;
-        }
-        if(PORTAbits.RA3 == 1 & pos > 0){
-            pos--;
-        }
-        switch (icon){
-            case 0 :
-                icon = 1;
-                break;
-            case 1 :
-                icon = 2;
-                break;
-            case 2 :
-                icon = 3;
-                break;
-            case 3 :
-                icon = 0;
-                break;
-            default:
-                break;
-        }
+        move_lock();
+        lock_sprite_switch();
 
-        LCDcommand(0b00000001);
         CG_char(icon,line,pos);
         _delay((unsigned long)((200)*(8000000/4000.0)));
+        shift++;
+
+        for(int i = 0; i < 8; i++){
+            if(key_pos[i] == pos & key_line[i] == line){
+                game_over_seq();
+                return;
+            }
+        }
+
+        if(key_ > (pos+14)){
+            out_of_screen();
+            return;
+        }
+
+        if((shift % level) == 0){
+            move_stage();
+        }
+
+        if (pos == 39){
+            level_up();
+        }
     }
+}
+
+void move_lock(void){
+    if(PORTAbits.RA0 == 1 & line == 2){
+        MoveCursor(pos, 2);
+        LCDchar(' ');
+        line--;
+    }
+    if(PORTAbits.RA1 == 1 & line == 1){
+        MoveCursor(pos, 1);
+        LCDchar(' ');
+        line++;
+    }
+    if(PORTAbits.RA2 == 1 & pos < (key_ - 1)){
+        MoveCursor(pos, line);
+        LCDchar(' ');
+        pos++;
+    }
+    if(PORTAbits.RA3 == 1 & pos > 1){
+        MoveCursor(pos, line);
+        LCDchar(' ');
+        pos--;
+    }
+}
+
+void move_stage(void){
+    MoveLCD(0,1);
+    key_++;
+    if((key_ % 2) == 0){
+        if(key_pointer == 8){
+            key_pointer = 0;
+        }
+        key_line[key_pointer] = rand_key(key_);
+        key_pos[key_pointer] = key_;
+        key_pointer++;
+    }
+}
+
+void lock_sprite_switch(void){
+    switch (icon){
+        case 0 :
+            icon = 1;
+            break;
+        case 1 :
+            icon = 2;
+            break;
+        case 2 :
+            icon = 3;
+            break;
+        case 3 :
+            icon = 0;
+            break;
+        default:
+            break;
+    }
+}
+
+void level_up(void){
+    LCDcommand(0b00000001);
+    _delay((unsigned long)((100)*(8000000/4000.0)));
+    MoveCursor(4, 1);
+    LCDString("Level Up");
+    CG_char(7,2,8);
+    _delay((unsigned long)((2500)*(8000000/4000.0)));
+    pos = pos - key_ + 14;
+    key_pointer = 0;
+    int key_pos[8] = {-1, -1, -1, -1, -1, -1, -1, -1};
+    int key_line[8] = {-1, -1, -1, -1, -1, -1, -1, -1};
+    shift = 0;
+    key_ = 14;
+    level--;
+    if (level==1){
+        level = 2;
+    }
+    LCDcommand(0b00000001);
+}
+
+void game_over_seq(void){
+    LCDcommand(0b00000001);
+    _delay((unsigned long)((100)*(8000000/4000.0)));
+    MoveCursor(4, 1);
+    LCDString("GAME OVER");
+    _delay((unsigned long)((500)*(8000000/4000.0)));
+    CG_char(0,2,6);
+    _delay((unsigned long)((500)*(8000000/4000.0)));
+    CG_char(1,2,7);
+    _delay((unsigned long)((500)*(8000000/4000.0)));
+    CG_char(2,2,8);
+    _delay((unsigned long)((500)*(8000000/4000.0)));
+    CG_char(3,2,9);
+    _delay((unsigned long)((500)*(8000000/4000.0)));
+    CG_char(4,2,10);
+    _delay((unsigned long)((2000)*(8000000/4000.0)));
+}
+
+void out_of_screen(void){
+    LCDcommand(0b00000001);
+    _delay((unsigned long)((100)*(8000000/4000.0)));
+    MoveCursor(4, 1);
+    LCDString("GAME OVER");
+    _delay((unsigned long)((500)*(8000000/4000.0)));
+    CG_char(6,2,8);
+    _delay((unsigned long)((3000)*(8000000/4000.0)));
 }

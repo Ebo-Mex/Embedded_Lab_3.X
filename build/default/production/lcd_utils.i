@@ -5630,10 +5630,12 @@ extern __attribute__((nonreentrant)) void _delay3(unsigned char);
 void iniLCD(void);
 void LCDcommand(char a);
 void LCDchar(char a);
-void CG_char(char a, int line, int row);
+void CG_char(char a, char line, char row);
 void MoveCursor(char x, char y);
 void MoveLCD(char dir, char inc);
 void GenChar(unsigned char loc,unsigned char *msg);
+int rand_key(char k_pos);
+void LCDString(char *msg);
 # 1 "lcd_utils.c" 2
 
 
@@ -5649,7 +5651,7 @@ void iniLCD(){
     LCDcommand(0b00111000);
     LCDcommand(0b00001100);
     LCDcommand(0b00000001);
-    LCDcommand(0b00000111);
+    LCDcommand(0b00000110);
     return;
 }
 
@@ -5671,7 +5673,7 @@ void LCDchar(char a){
     PORTEbits.RE1 = 0;
 }
 
-void CG_char(char a, int line, int row){
+void CG_char(char a, char line, char row){
     int cmd;
     if (line == 1)
     {
@@ -5687,25 +5689,23 @@ void CG_char(char a, int line, int row){
 }
 
 void MoveCursor(char x, char y){
-    char a;
-    if(y <= 1 && x <= 39){
-        if(y ==0){
-            a = x;
-        }
-        else{
-            a = x + 64;
-        }
-        a = a | 0b10000000;
+    int cmd;
+    if (y == 1)
+    {
+        y = 0x80;
+        cmd = y + x;
+    } else if (y==2)
+    {
+        y = 0xC0;
+        cmd = y + x;
     }
-    PORTEbits.RE0 = 0;
-    PORTD = a;
-    PORTEbits.RE1 = 1;
-    _delay((unsigned long)((2)*(8000000/4000.0)));
-    PORTEbits.RE1 = 0;
+    LCDcommand(cmd);
+
     return;
 }
 
 void MoveLCD(char dir, char inc){
+    LCDcommand(0b00000111);
     if(dir==0){
         for(int i = 0; i < inc; i++){
         LCDcommand(0b00011000);
@@ -5718,6 +5718,7 @@ void MoveLCD(char dir, char inc){
             _delay((unsigned long)((200)*(8000000/4000.0)));
         }
     }
+    LCDcommand(0b00000110);
 }
 
 void GenChar(unsigned char loc,unsigned char *msg){
@@ -5727,5 +5728,18 @@ void GenChar(unsigned char loc,unsigned char *msg){
         LCDcommand(0b01000000 + (loc*8));
         for(i=0;i<8;i++)
             LCDchar(msg[i]);
+    }
+}
+
+int rand_key(char k_pos){
+    int ene_line = rand() % 2 + 1;
+    CG_char(5,ene_line,k_pos);
+    return ene_line;
+}
+
+void LCDString(char *msg){
+ while((*msg)!=0){
+   LCDchar(*msg);
+   msg++;
     }
 }

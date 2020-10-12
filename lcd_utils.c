@@ -10,9 +10,9 @@ void iniLCD(){
     __delay_ms(1);          //5. Esperar mas de 100us
     LCDcommand(Set8);       //6. Comando set 8 bits
     LCDcommand(Set8_2lin);  //N = 1 (2 lines), F=0 (5x8)
-    LCDcommand(DispOn);   //D<2> ON; C<1> OFF; B<0> OFF;
+    LCDcommand(DispOn);     //D<2> ON; C<1> OFF; B<0> OFF;
     LCDcommand(ClearDisp);  //Disp Clear
-    LCDcommand(IncShif);  //I/D = 1, S=0
+    LCDcommand(IncNoShif);  //I/D = 1, S=0
     return;
 }
 
@@ -34,7 +34,7 @@ void LCDchar(char a){
     PORTEbits.RE1 = 0; //RE1 --> E=0
 }
 
-void CG_char(char a, int line, int row){
+void CG_char(char a, char line, char row){
     int cmd;
     if (line == 1)
     {
@@ -50,25 +50,23 @@ void CG_char(char a, int line, int row){
 }
 
 void MoveCursor(char x, char y){
-    char a;
-    if(y <= 1 && x <= 39){
-        if(y ==0){
-            a = x;
-        }
-        else{
-            a = x + 64;
-        }
-        a = a | SetDDRAM;
-    }
-    PORTEbits.RE0 = 0; //RE0 --> RS=0
-    PORTD = a;
-    PORTEbits.RE1 = 1; //RE1 --> E=1
-    __delay_ms(2);
-    PORTEbits.RE1 = 0; //RE1 --> E=0
+    int cmd;
+    if (y == 1)
+    {
+        y = 0x80;
+        cmd = y + x;
+    } else if (y==2)
+    {
+        y = 0xC0;
+        cmd = y + x;    
+    }   
+    LCDcommand(cmd);
+   
     return;
 }
 
 void MoveLCD(char dir, char inc){
+    LCDcommand(IncShif);
     if(dir==0){
         for(int i = 0; i < inc; i++){
         LCDcommand(DispSfL);
@@ -81,6 +79,7 @@ void MoveLCD(char dir, char inc){
             __delay_ms(200);
         }
     }
+    LCDcommand(IncNoShif);
 }
 
 void GenChar(unsigned char loc,unsigned char *msg){
@@ -91,4 +90,17 @@ void GenChar(unsigned char loc,unsigned char *msg){
         for(i=0;i<8;i++)  /* Write 8 byte for generation of 1 character */
             LCDchar(msg[i]);
     }   
+}
+
+int rand_key(char k_pos){
+    int ene_line = rand() % 2 + 1;
+    CG_char(5,ene_line,k_pos);
+    return ene_line;
+}
+
+void LCDString(char *msg){
+	while((*msg)!=0){		
+	  LCDchar(*msg);
+	  msg++;
+    }
 }

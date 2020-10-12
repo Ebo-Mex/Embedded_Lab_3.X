@@ -36,6 +36,9 @@ Version 4.0 HI-TECH Software Intermediate Code
 "2705
 [; ;D:/Microchip/xc8/v2.00/pic/include\pic18f4550.h: 2705: extern volatile unsigned char PORTD __attribute__((address(0xF83)));
 [v _PORTD `Vuc ~T0 @X0 0 e@3971 ]
+"41 D:/Microchip/xc8/v2.00/pic/include/c99\stdlib.h
+[; ;D:/Microchip/xc8/v2.00/pic/include/c99\stdlib.h: 41: int rand (void);
+[v _rand `(i ~T0 @X0 0 ef ]
 "54 D:/Microchip/xc8/v2.00/pic/include\pic18f4550.h
 [; ;D:/Microchip/xc8/v2.00/pic/include\pic18f4550.h: 54: __asm("SPPDATA equ 0F62h");
 [; <" SPPDATA equ 0F62h ;# ">
@@ -580,8 +583,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;lcd_utils.c: 14:     LCDcommand(0b00000001);
 [e ( _LCDcommand (1 -> -> 1 `i `uc ]
 "15
-[; ;lcd_utils.c: 15:     LCDcommand(0b00000111);
-[e ( _LCDcommand (1 -> -> 7 `i `uc ]
+[; ;lcd_utils.c: 15:     LCDcommand(0b00000110);
+[e ( _LCDcommand (1 -> -> 6 `i `uc ]
 "16
 [; ;lcd_utils.c: 16:     return;
 [e $UE 367  ]
@@ -648,44 +651,44 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :UE 369 ]
 }
 "37
-[; ;lcd_utils.c: 37: void CG_char(char a, int line, int row){
-[v _CG_char `(v ~T0 @X0 1 ef3`uc`i`i ]
+[; ;lcd_utils.c: 37: void CG_char(char a, char line, char row){
+[v _CG_char `(v ~T0 @X0 1 ef3`uc`uc`uc ]
 {
 [e :U _CG_char ]
 [v _a `uc ~T0 @X0 1 r1 ]
-[v _line `i ~T0 @X0 1 r2 ]
-[v _row `i ~T0 @X0 1 r3 ]
+[v _line `uc ~T0 @X0 1 r2 ]
+[v _row `uc ~T0 @X0 1 r3 ]
 [f ]
 "38
 [; ;lcd_utils.c: 38:     int cmd;
 [v _cmd `i ~T0 @X0 1 a ]
 "39
 [; ;lcd_utils.c: 39:     if (line == 1)
-[e $ ! == _line -> 1 `i 371  ]
+[e $ ! == -> _line `i -> 1 `i 371  ]
 "40
 [; ;lcd_utils.c: 40:     {
 {
 "41
 [; ;lcd_utils.c: 41:         line = 0x80;
-[e = _line -> 128 `i ]
+[e = _line -> -> 128 `i `uc ]
 "42
 [; ;lcd_utils.c: 42:         cmd = line + row;
-[e = _cmd + _line _row ]
+[e = _cmd + -> _line `i -> _row `i ]
 "43
 [; ;lcd_utils.c: 43:     } else if (line==2)
 }
 [e $U 372  ]
 [e :U 371 ]
-[e $ ! == _line -> 2 `i 373  ]
+[e $ ! == -> _line `i -> 2 `i 373  ]
 "44
 [; ;lcd_utils.c: 44:     {
 {
 "45
 [; ;lcd_utils.c: 45:         line = 0xC0;
-[e = _line -> 192 `i ]
+[e = _line -> -> 192 `i `uc ]
 "46
 [; ;lcd_utils.c: 46:         cmd = line + row;
-[e = _cmd + _line _row ]
+[e = _cmd + -> _line `i -> _row `i ]
 "47
 [; ;lcd_utils.c: 47:     }
 }
@@ -710,174 +713,219 @@ Version 4.0 HI-TECH Software Intermediate Code
 [v _y `uc ~T0 @X0 1 r2 ]
 [f ]
 "53
-[; ;lcd_utils.c: 53:     char a;
-[v _a `uc ~T0 @X0 1 a ]
+[; ;lcd_utils.c: 53:     int cmd;
+[v _cmd `i ~T0 @X0 1 a ]
 "54
-[; ;lcd_utils.c: 54:     if(y <= 1 && x <= 39){
-[e $ ! && <= -> _y `i -> 1 `i <= -> _x `i -> 39 `i 375  ]
-{
+[; ;lcd_utils.c: 54:     if (y == 1)
+[e $ ! == -> _y `i -> 1 `i 375  ]
 "55
-[; ;lcd_utils.c: 55:         if(y ==0){
-[e $ ! == -> _y `i -> 0 `i 376  ]
+[; ;lcd_utils.c: 55:     {
 {
 "56
-[; ;lcd_utils.c: 56:             a = x;
-[e = _a _x ]
+[; ;lcd_utils.c: 56:         y = 0x80;
+[e = _y -> -> 128 `i `uc ]
 "57
-[; ;lcd_utils.c: 57:         }
-}
-[e $U 377  ]
+[; ;lcd_utils.c: 57:         cmd = y + x;
+[e = _cmd + -> _y `i -> _x `i ]
 "58
-[; ;lcd_utils.c: 58:         else{
-[e :U 376 ]
-{
-"59
-[; ;lcd_utils.c: 59:             a = x + 64;
-[e = _a -> + -> _x `i -> 64 `i `uc ]
-"60
-[; ;lcd_utils.c: 60:         }
+[; ;lcd_utils.c: 58:     } else if (y==2)
 }
-[e :U 377 ]
+[e $U 376  ]
+[e :U 375 ]
+[e $ ! == -> _y `i -> 2 `i 377  ]
+"59
+[; ;lcd_utils.c: 59:     {
+{
+"60
+[; ;lcd_utils.c: 60:         y = 0xC0;
+[e = _y -> -> 192 `i `uc ]
 "61
-[; ;lcd_utils.c: 61:         a = a | 0b10000000;
-[e = _a -> | -> _a `i -> 128 `i `uc ]
+[; ;lcd_utils.c: 61:         cmd = y + x;
+[e = _cmd + -> _y `i -> _x `i ]
 "62
 [; ;lcd_utils.c: 62:     }
 }
-[e :U 375 ]
+[e :U 377 ]
+[e :U 376 ]
 "63
-[; ;lcd_utils.c: 63:     PORTEbits.RE0 = 0;
-[e = . . _PORTEbits 0 0 -> -> 0 `i `uc ]
-"64
-[; ;lcd_utils.c: 64:     PORTD = a;
-[e = _PORTD -> _a `uc ]
+[; ;lcd_utils.c: 63:     LCDcommand(cmd);
+[e ( _LCDcommand (1 -> _cmd `uc ]
 "65
-[; ;lcd_utils.c: 65:     PORTEbits.RE1 = 1;
-[e = . . _PORTEbits 0 1 -> -> 1 `i `uc ]
-"66
-[; ;lcd_utils.c: 66:     _delay((unsigned long)((2)*(8000000/4000.0)));
-[e ( __delay (1 -> * -> -> 2 `i `d / -> -> 8000000 `l `d .4000.0 `ul ]
-"67
-[; ;lcd_utils.c: 67:     PORTEbits.RE1 = 0;
-[e = . . _PORTEbits 0 1 -> -> 0 `i `uc ]
-"68
-[; ;lcd_utils.c: 68:     return;
+[; ;lcd_utils.c: 65:     return;
 [e $UE 374  ]
-"69
-[; ;lcd_utils.c: 69: }
+"66
+[; ;lcd_utils.c: 66: }
 [e :UE 374 ]
 }
-"71
-[; ;lcd_utils.c: 71: void MoveLCD(char dir, char inc){
+"68
+[; ;lcd_utils.c: 68: void MoveLCD(char dir, char inc){
 [v _MoveLCD `(v ~T0 @X0 1 ef2`uc`uc ]
 {
 [e :U _MoveLCD ]
 [v _dir `uc ~T0 @X0 1 r1 ]
 [v _inc `uc ~T0 @X0 1 r2 ]
 [f ]
-"72
-[; ;lcd_utils.c: 72:     if(dir==0){
+"69
+[; ;lcd_utils.c: 69:     LCDcommand(0b00000111);
+[e ( _LCDcommand (1 -> -> 7 `i `uc ]
+"70
+[; ;lcd_utils.c: 70:     if(dir==0){
 [e $ ! == -> _dir `i -> 0 `i 379  ]
 {
-"73
-[; ;lcd_utils.c: 73:         for(int i = 0; i < inc; i++){
+"71
+[; ;lcd_utils.c: 71:         for(int i = 0; i < inc; i++){
 {
 [v _i `i ~T0 @X0 1 a ]
 [e = _i -> 0 `i ]
 [e $U 383  ]
 [e :U 380 ]
 {
-"74
-[; ;lcd_utils.c: 74:         LCDcommand(0b00011000);
+"72
+[; ;lcd_utils.c: 72:         LCDcommand(0b00011000);
 [e ( _LCDcommand (1 -> -> 24 `i `uc ]
-"75
-[; ;lcd_utils.c: 75:         _delay((unsigned long)((200)*(8000000/4000.0)));
+"73
+[; ;lcd_utils.c: 73:         _delay((unsigned long)((200)*(8000000/4000.0)));
 [e ( __delay (1 -> * -> -> 200 `i `d / -> -> 8000000 `l `d .4000.0 `ul ]
-"76
-[; ;lcd_utils.c: 76:         }
+"74
+[; ;lcd_utils.c: 74:         }
 }
 [e ++ _i -> 1 `i ]
 [e :U 383 ]
 [e $ < _i -> _inc `i 380  ]
 [e :U 381 ]
 }
-"77
-[; ;lcd_utils.c: 77:     }
+"75
+[; ;lcd_utils.c: 75:     }
 }
 [e $U 384  ]
-"78
-[; ;lcd_utils.c: 78:     else{
+"76
+[; ;lcd_utils.c: 76:     else{
 [e :U 379 ]
 {
-"79
-[; ;lcd_utils.c: 79:         for(int i = 0; i < inc; i++){
+"77
+[; ;lcd_utils.c: 77:         for(int i = 0; i < inc; i++){
 {
 [v _i `i ~T0 @X0 1 a ]
 [e = _i -> 0 `i ]
 [e $U 388  ]
 [e :U 385 ]
 {
-"80
-[; ;lcd_utils.c: 80:             LCDcommand(0b00011100);
+"78
+[; ;lcd_utils.c: 78:             LCDcommand(0b00011100);
 [e ( _LCDcommand (1 -> -> 28 `i `uc ]
-"81
-[; ;lcd_utils.c: 81:             _delay((unsigned long)((200)*(8000000/4000.0)));
+"79
+[; ;lcd_utils.c: 79:             _delay((unsigned long)((200)*(8000000/4000.0)));
 [e ( __delay (1 -> * -> -> 200 `i `d / -> -> 8000000 `l `d .4000.0 `ul ]
-"82
-[; ;lcd_utils.c: 82:         }
+"80
+[; ;lcd_utils.c: 80:         }
 }
 [e ++ _i -> 1 `i ]
 [e :U 388 ]
 [e $ < _i -> _inc `i 385  ]
 [e :U 386 ]
 }
-"83
-[; ;lcd_utils.c: 83:     }
+"81
+[; ;lcd_utils.c: 81:     }
 }
 [e :U 384 ]
-"84
-[; ;lcd_utils.c: 84: }
+"82
+[; ;lcd_utils.c: 82:     LCDcommand(0b00000110);
+[e ( _LCDcommand (1 -> -> 6 `i `uc ]
+"83
+[; ;lcd_utils.c: 83: }
 [e :UE 378 ]
 }
-"86
-[; ;lcd_utils.c: 86: void GenChar(unsigned char loc,unsigned char *msg){
+"85
+[; ;lcd_utils.c: 85: void GenChar(unsigned char loc,unsigned char *msg){
 [v _GenChar `(v ~T0 @X0 1 ef2`uc`*uc ]
 {
 [e :U _GenChar ]
 [v _loc `uc ~T0 @X0 1 r1 ]
 [v _msg `*uc ~T0 @X0 1 r2 ]
 [f ]
-"87
-[; ;lcd_utils.c: 87:     unsigned char i;
+"86
+[; ;lcd_utils.c: 86:     unsigned char i;
 [v _i `uc ~T0 @X0 1 a ]
-"88
-[; ;lcd_utils.c: 88:     if(loc<8)
+"87
+[; ;lcd_utils.c: 87:     if(loc<8)
 [e $ ! < -> _loc `i -> 8 `i 390  ]
-"89
-[; ;lcd_utils.c: 89:     {
+"88
+[; ;lcd_utils.c: 88:     {
 {
-"90
-[; ;lcd_utils.c: 90:         LCDcommand(0b01000000 + (loc*8));
+"89
+[; ;lcd_utils.c: 89:         LCDcommand(0b01000000 + (loc*8));
 [e ( _LCDcommand (1 -> + -> 64 `i * -> _loc `i -> 8 `i `uc ]
-"91
-[; ;lcd_utils.c: 91:         for(i=0;i<8;i++)
+"90
+[; ;lcd_utils.c: 90:         for(i=0;i<8;i++)
 {
 [e = _i -> -> 0 `i `uc ]
 [e $ < -> _i `i -> 8 `i 391  ]
 [e $U 392  ]
 [e :U 391 ]
-"92
-[; ;lcd_utils.c: 92:             LCDchar(msg[i]);
+"91
+[; ;lcd_utils.c: 91:             LCDchar(msg[i]);
 [e ( _LCDchar (1 -> *U + _msg * -> _i `ux -> -> # *U _msg `ui `ux `uc ]
 [e ++ _i -> -> 1 `i `uc ]
 [e $ < -> _i `i -> 8 `i 391  ]
 [e :U 392 ]
 }
-"93
-[; ;lcd_utils.c: 93:     }
+"92
+[; ;lcd_utils.c: 92:     }
 }
 [e :U 390 ]
-"94
-[; ;lcd_utils.c: 94: }
+"93
+[; ;lcd_utils.c: 93: }
 [e :UE 389 ]
+}
+"95
+[; ;lcd_utils.c: 95: int rand_key(char k_pos){
+[v _rand_key `(i ~T0 @X0 1 ef1`uc ]
+{
+[e :U _rand_key ]
+[v _k_pos `uc ~T0 @X0 1 r1 ]
+[f ]
+"96
+[; ;lcd_utils.c: 96:     int ene_line = rand() % 2 + 1;
+[v _ene_line `i ~T0 @X0 1 a ]
+[e = _ene_line + % ( _rand ..  -> 2 `i -> 1 `i ]
+"97
+[; ;lcd_utils.c: 97:     CG_char(5,ene_line,k_pos);
+[e ( _CG_char (3 , , -> -> 5 `i `uc -> _ene_line `uc _k_pos ]
+"98
+[; ;lcd_utils.c: 98:     return ene_line;
+[e ) _ene_line ]
+[e $UE 394  ]
+"99
+[; ;lcd_utils.c: 99: }
+[e :UE 394 ]
+}
+"101
+[; ;lcd_utils.c: 101: void LCDString(char *msg){
+[v _LCDString `(v ~T0 @X0 1 ef1`*uc ]
+{
+[e :U _LCDString ]
+[v _msg `*uc ~T0 @X0 1 r1 ]
+[f ]
+"102
+[; ;lcd_utils.c: 102:  while((*msg)!=0){
+[e $U 396  ]
+[e :U 397 ]
+{
+"103
+[; ;lcd_utils.c: 103:    LCDchar(*msg);
+[e ( _LCDchar (1 *U _msg ]
+"104
+[; ;lcd_utils.c: 104:    msg++;
+[e ++ _msg * -> -> 1 `i `x -> -> # *U _msg `i `x ]
+"105
+[; ;lcd_utils.c: 105:     }
+}
+[e :U 396 ]
+"102
+[; ;lcd_utils.c: 102:  while((*msg)!=0){
+[e $ != -> *U _msg `i -> 0 `i 397  ]
+[e :U 398 ]
+"106
+[; ;lcd_utils.c: 106: }
+[e :UE 395 ]
 }
